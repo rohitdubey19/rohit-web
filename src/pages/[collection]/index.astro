@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SECTIONS, type Section } from '../../site';
+import { postUrl } from '../../posts';
+
+export function getStaticPaths() {
+  return Object.keys(SECTIONS).map((collection) => ({ params: { collection } }));
+}
+const section = Astro.params.collection as Section;
+const entries = (await getCollection(section, ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+<Base title={SECTIONS[section]}>
+  <h1>{SECTIONS[section]}</h1>
+  {entries.length === 0 ? (
+    <p class="date">Nothing here yet.</p>
+  ) : (
+    <ul class="posts">
+      {entries.map((entry) => (
+        <li>
+          <a href={postUrl(section, entry.id)}>{entry.data.title}</a>
+          <div class="date">{entry.data.date.toISOString().slice(0, 10)}</div>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>

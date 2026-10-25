@@ -1,0 +1,52 @@
+---
+import { SITE_TITLE, SITE_TAGLINE, SECTIONS } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE_TAGLINE } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+  </head>
+  <body>
+    <header>
+      <a class="home" href="/">{SITE_TITLE}</a>
+      <nav>
+        {Object.entries(SECTIONS).map(([key, label]) => <a href={`/${key}/`}>{label}</a>)}
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer>
+      <p>Work: <a href="https://niwav.in">Niwav</a> · <a href="/rss.xml">RSS</a></p>
+    </footer>
+  </body>
+</html>
+<style is:global>
+  :root { --ink: #1d1d1b; --quiet: #6b6b66; --bg: #fbfaf7; --rule: #e4e2dc; --accent: #2f5d8a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #ecebe6; --quiet: #a3a29c; --bg: #161615; --rule: #2e2e2b; --accent: #8fb6dd; }
+  }
+  body { margin: 0 auto; max-width: 42rem; padding: 0 16px; background: var(--bg); color: var(--ink);
+    font: 18px/1.6 Georgia, 'Iowan Old Style', serif; }
+  header { display: flex; flex-wrap: wrap; gap: 1rem; align-items: baseline; justify-content: space-between;
+    padding: 1.5rem 0; border-bottom: 1px solid var(--rule); }
+  header .home { font-weight: 700; font-size: 1.2rem; color: var(--ink); text-decoration: none; }
+  nav { display: flex; gap: 1rem; }
+  a { color: var(--accent); }
+  main { padding: 1.5rem 0 3rem; }
+  footer { border-top: 1px solid var(--rule); color: var(--quiet); font-size: 0.9rem; }
+  img { max-width: 100%; height: auto; }
+  .date { color: var(--quiet); font-size: 0.9rem; }
+  ul.posts { list-style: none; padding: 0; }
+  ul.posts li { margin: 0 0 1rem; }
+</style>
