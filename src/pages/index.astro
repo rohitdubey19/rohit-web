@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_TAGLINE, SECTIONS } from '../site';
+import { allPosts, postUrl } from '../posts';
+
+const posts = (await allPosts()).slice(0, 10);
+---
+<Base>
+  <p>{SITE_TAGLINE}</p>
+  {posts.length === 0 ? (
+    <p class="date">Nothing published yet.</p>
+  ) : (
+    <ul class="posts">
+      {posts.map(({ section, entry }) => (
+        <li>
+          <a href={postUrl(section, entry.id)}>{entry.data.title}</a>
+          <div class="date">{SECTIONS[section]} · {entry.data.date.toISOString().slice(0, 10)}</div>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>
