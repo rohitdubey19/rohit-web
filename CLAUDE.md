@@ -11,6 +11,11 @@ Rohit's personal "window to the world": travel posts, the book Sh-Va, notes and
 whatever he makes later. Separate from niwav.in (the company site, Niwav project);
 the two link to each other only.
 
+## Source of truth
+- This file holds the rules and the privacy gates; `SOURCES.md` says who may send what. The project instructions only point here; if they disagree, this file wins and the instructions get fixed.
+- The private master copy of any content is in its owner project (Nextcloud or that project's repo), never here.
+- Registry row and decisions: `rohitdubey19/Niwav-DevOps` (`01-project-map.md`, `07-decision-log.md`).
+
 ## The one rule
 **This repo is public. Everything merged here is published for good.** Private
 material is never kept here as a source. Nextcloud and each project's own repo
@@ -45,5 +50,12 @@ private repo, and never will.
 ## Secrets
 None. Pages deploys with the workflow's own token. The Cloudflare DNS token is a CyPhyS business credential and is not for this project (one-off use recorded in Niwav-DevOps 07, 2026-10-25).
 
-## Commands
-npm ci · npm run dev · npm run build · npm run check:public (needs exiftool)
+## Must not break
+- `public-safety.yml` runs on every PR and before every deploy; never weaken, skip or bypass it to get a post out.
+- The custom domain `rohit.niwav.in` (Pages setting plus the Cloudflare CNAME). Changing or dropping it opens a subdomain-takeover gap; that is Rohit's call.
+- No token for a private source in this repo's secrets or workflows.
+
+## CI quick reference
+- `deploy.yml`: push to `main` builds and deploys to Pages. `public-safety.yml`: every PR and push to `main`.
+- A `[skip ci]` commit skips both, so use it only for docs-only changes (this file, `README.md`, `SOURCES.md`), never for content.
+- Local: npm ci · npm run dev · npm run build · npm run check:public (needs exiftool)
